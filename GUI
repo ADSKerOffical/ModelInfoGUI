@@ -1,0 +1,157 @@
+local h = Instance.new("ScreenGui")
+local Main = Instance.new("ImageLabel")
+local Top = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local TextBox = Instance.new("TextBox")
+local TextButton = Instance.new("TextButton")
+local Text1Button = Instance.new("TextButton")
+local OneLineButton = Instance.new("TextButton")
+
+h.Name = "h"
+h.Parent = game:GetService("CoreGui")
+h.ResetOnSpawn = false
+
+Main.Name = "Main"
+Main.Parent = h
+Main.Active = true
+Main.Draggable = true
+Main.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+Main.BorderSizePixel = 0
+Main.Position = UDim2.new(0.3, 0, 0.3, 0)
+Main.Size = UDim2.new(0, 300, 0, 190)
+Main.Image = "rbxassetid://16336200609"
+
+Top.Name = "Top"
+Top.Parent = Main
+Top.BackgroundColor3 = Color3.fromRGB(0, 90, 0)
+Top.BorderSizePixel = 0
+Top.Size = UDim2.new(1, 0, 0, 30)
+
+Title.Name = "Title"
+Title.Parent = Top
+Title.BackgroundColor3 = Color3.fromRGB(0, 60, 0)
+Title.BorderSizePixel = 0
+Title.Position = UDim2.new(0, 0, 0.295454562, 0)
+Title.Size = UDim2.new(1, 0, 1, 0)
+Title.Font = Enum.Font.SourceSans
+Title.Text = "Model Info GUI"
+Title.TextColor3 = Color3.fromRGB(0, 255, 0)
+Title.TextScaled = true
+Title.TextSize = 14.000
+Title.TextWrapped = true
+
+TextBox.Parent = Main
+TextBox.BackgroundColor3 = Color3.fromRGB(0, 99, 0)
+TextBox.BorderSizePixel = 0
+TextBox.Position = UDim2.new(0.05, 0, 0.3, 0)
+TextBox.Size = UDim2.new(0.9, 0, 0.3, 0)
+TextBox.Font = Enum.Font.SourceSans
+TextBox.PlaceholderText = "Paste Id here"
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(0, 255, 20)
+TextBox.TextScaled = true
+TextBox.TextSize = 14.000
+TextBox.MultiLine = true
+TextBox.ClearTextOnFocus = false
+TextBox.TextWrapped = true
+
+TextButton.Parent = Main
+TextButton.BackgroundColor3 = Color3.fromRGB(0, 99, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.07, 0, 0.67, 0)
+TextButton.Size = UDim2.new(0.3, 0, 0.1, 0)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "Find source code"
+TextButton.TextColor3 = Color3.fromRGB(0, 255, 0)
+TextButton.TextScaled = true
+TextButton.TextSize = 14.000
+TextButton.TextWrapped = true
+
+Text1Button.Parent = Main
+Text1Button.BackgroundColor3 = Color3.fromRGB(0, 99, 0)
+Text1Button.BorderSizePixel = 0
+Text1Button.Position = UDim2.new(0.6, 0, 0.67, 0)
+Text1Button.Size = UDim2.new(0.3, 0, 0.1, 0)
+Text1Button.Font = Enum.Font.SourceSans
+Text1Button.Text = "Copy source"
+Text1Button.TextColor3 = Color3.fromRGB(0, 255, 0)
+Text1Button.TextScaled = true
+Text1Button.TextSize = 14.000
+Text1Button.TextWrapped = true
+
+OneLineButton.Parent = Main
+OneLineButton.BackgroundColor3 = Color3.fromRGB(0, 99, 0)
+OneLineButton.BorderSizePixel = 0
+OneLineButton.Position = UDim2.new(0.25, 0, 0.85, 0)
+OneLineButton.Size = UDim2.new(0.5, 0, 0.1, 0)
+OneLineButton.Font = Enum.Font.SourceSans
+OneLineButton.Text = "Execute model"
+OneLineButton.TextColor3 = Color3.fromRGB(0, 255, 0)
+OneLineButton.TextScaled = true
+OneLineButton.TextSize = 14.000
+OneLineButton.TextWrapped = true
+
+TextButton.MouseButton1Click:Connect(function()
+   local assetId = tonumber(TextBox.Text)
+if not assetId then
+    warn("Invalid asset ID")
+    return
+end
+
+local model = game:GetObjects("rbxassetid://" .. assetId)[1]
+
+print("Supposed script in asset:")
+local function printScriptContents(object)
+    if object:IsA("Script") then
+        print(object.Source)
+    end
+    for _, child in pairs(object:GetChildren()) do
+        printScriptContents(child)
+    end
+end
+
+printScriptContents(model)
+end)
+
+Text1Button.MouseButton1Click:Connect(function()
+local assetId = tonumber(TextBox.Text)
+if not assetId then
+    warn("Invalid asset ID")
+    return
+end
+
+local model = game:GetObjects("rbxassetid://" .. assetId)[1]
+
+local function printScriptContents(object)
+    if object:IsA("Script") then
+        setclipboard(object.Source)
+    end
+    for _, child in pairs(object:GetChildren()) do
+        printScriptContents(child)
+    end
+end
+
+printScriptContents(model)
+end)
+
+OneLineButton.MouseButton1Click:Connect(function()
+    local assetId = tonumber(TextBox.Text)
+  if not assetId then
+   warn("Invalid asset ID")
+   return
+  end
+ 
+  local model = game:GetObjects("rbxassetid://" .. assetId)[1]
+model.Parent = workspace
+end)
+
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 36, 0, 37)
+closeButton.Position = UDim2.new(0.5, 113, 0.5, -94)
+closeButton.BackgroundColor3 = Color3.new(0.8, 0, 0)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.new(1, 1, 1)
+closeButton.Parent = Main
+closeButton.MouseButton1Click:Connect(function()
+h:Destroy()
+end)
